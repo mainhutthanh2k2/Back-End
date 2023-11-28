@@ -1,8 +1,8 @@
-import User from "../models/User.js";
+import Category from "../models/Category.js";
 import _ from "lodash";
 
-const userController = {
-    getUser: async (req, res) => {
+const categoryController = {
+    getCategory: async (req, res) => {
         try {
             const data = req.query,
                 condition = {},
@@ -15,19 +15,19 @@ const userController = {
                 else condition[key] = data[key];
             });
 
-            const users = await User.find(condition, null, option).sort(sort);
+            const categories = await Category.find(condition, null, option).sort(sort);
 
-            if (!_.isEmpty(users)) {
-                return res.status(200).json({ status: 0, users });
+            if (!_.isEmpty(categories)) {
+                return res.status(200).json({ status: 0, categories });
             } else {
-                return res.status(200).json({ status: 2, message: "Cannot find users!" });
+                return res.status(200).json({ status: 2, message: "Cannot find categories!" });
             }
         } catch (err) {
             console.log("Error: " + err);
             return res.status(400).json({ status: 1, err });
         }
     },
-    addUser: async (req, res) => {
+    addCategory: async (req, res) => {
         try {
             const data = req.body;
 
@@ -36,9 +36,9 @@ const userController = {
             }
 
             if (Array.isArray(data)) {
-                await User.insertMany(data);
+                await Category.insertMany(data);
 
-                return res.status(200).json({ status: 0, message: "Insert user successfully!" });
+                return res.status(200).json({ status: 0, message: "Insert category successfully!" });
             } else {
                 return res.status(200).json({ status: 2, message: "The data sent is not in the correct format!" });
             }
@@ -47,7 +47,7 @@ const userController = {
             return res.status(400).json({ status: 1, err });
         }
     },
-    updateUser: async (req, res) => {
+    updateCategory: async (req, res) => {
         try {
             const data = req.body;
 
@@ -55,27 +55,29 @@ const userController = {
                 return res.status(200).json({ status: 3, message: "Data is empty!" });
             }
 
-            const result = await User.updateOne(data.filter, { $set: data.update });
+            const result = await Category.updateOne(data.filter, { $set: data.update });
 
-            if (result.modifiedCount == 0) return res.status(200).json({ status: 2, message: "Update user failed!" });
+            if (result.modifiedCount == 0)
+                return res.status(200).json({ status: 2, message: "Update category failed!" });
 
-            return res.status(200).json({ status: 0, message: "Update user successfully!" });
+            return res.status(200).json({ status: 0, message: "Update category successfully!" });
         } catch (err) {
             console.log("Error: " + err);
             return res.status(400).json({ status: 1, err });
         }
     },
-    deleteUser: async (req, res) => {
+    deleteCategory: async (req, res) => {
         try {
             const condition = req.query;
 
             if (_.isEmpty(condition)) return res.status(200).json({ status: 2, message: "Data is empty!" });
 
-            const result = await User.deleteOne(condition);
+            const result = await Category.deleteOne(condition);
 
-            if (result.deletedCount == 0) return res.status(200).json({ status: 3, message: "Delete user failed!" });
+            if (result.deletedCount == 0)
+                return res.status(200).json({ status: 3, message: "Delete category failed!" });
 
-            return res.status(200).json({ status: 0, message: "Delete user successfully!" });
+            return res.status(200).json({ status: 0, message: "Delete category successfully!" });
         } catch (err) {
             console.log("Error: " + err);
             return res.status(400).json({ status: 1, err });
@@ -83,4 +85,4 @@ const userController = {
     },
 };
 
-export default userController;
+export default categoryController;
