@@ -1,8 +1,8 @@
-import Product from "../models/Product.js";
+import User from "../models/User.js";
 import _ from "lodash";
 
 const productController = {
-    getProducts: async (req, res) => {
+    getUser: async (req, res) => {
         try {
             const data = req.query,
                 condition = {},
@@ -15,19 +15,19 @@ const productController = {
                 else condition[key] = data[key];
             });
 
-            const products = await Product.find(condition, null, option).sort(sort);
+            const users = await User.find(condition, null, option).sort(sort);
 
-            if (!_.isEmpty(products)) {
-                return res.status(200).json({ status: 0, products });
+            if (!_.isEmpty(users)) {
+                return res.status(200).json({ status: 0, users });
             } else {
-                return res.status(200).json({ status: 2, message: "Cannot find products!" });
+                return res.status(200).json({ status: 2, message: "Cannot find users!" });
             }
         } catch (err) {
             console.log("Error: " + err);
             return res.status(400).json({ status: 1, err });
         }
     },
-    addProduct: async (req, res) => {
+    addUser: async (req, res) => {
         try {
             const data = req.body;
 
@@ -36,9 +36,9 @@ const productController = {
             }
 
             if (Array.isArray(data)) {
-                await Product.insertMany(data);
+                await User.insertMany(data);
 
-                return res.status(200).json({ status: 0, message: "Insert product successfully!" });
+                return res.status(200).json({ status: 0, message: "Insert user successfully!" });
             } else {
                 return res.status(200).json({ status: 2, message: "The data sent is not in the correct format!" });
             }
@@ -47,7 +47,7 @@ const productController = {
             return res.status(400).json({ status: 1, err });
         }
     },
-    updateProduct: async (req, res) => {
+    updateUser: async (req, res) => {
         try {
             const data = req.body;
 
@@ -55,28 +55,27 @@ const productController = {
                 return res.status(200).json({ status: 3, message: "Data is empty!" });
             }
 
-            const result = await Product.updateOne(data.filter, { $set: data.update });
+            const result = await User.updateOne(data.filter, { $set: data.update });
 
-            if (result.modifiedCount == 0)
-                return res.status(200).json({ status: 2, message: "Update product failed!" });
+            if (result.modifiedCount == 0) return res.status(200).json({ status: 2, message: "Update user failed!" });
 
-            return res.status(200).json({ status: 0, message: "Update product successfully!" });
+            return res.status(200).json({ status: 0, message: "Update user successfully!" });
         } catch (err) {
             console.log("Error: " + err);
             return res.status(400).json({ status: 1, err });
         }
     },
-    deleteProduct: async (req, res) => {
+    deleteUser: async (req, res) => {
         try {
             const condition = req.query;
 
             if (_.isEmpty(condition)) return res.status(200).json({ status: 2, message: "Data is empty!" });
 
-            const result = await Product.deleteOne(condition);
+            const result = await User.deleteOne(condition);
 
-            if (result.deletedCount == 0) return res.status(200).json({ status: 3, message: "Delete product failed!" });
+            if (result.deletedCount == 0) return res.status(200).json({ status: 3, message: "Delete user failed!" });
 
-            return res.status(200).json({ status: 0, message: "Delete product successfully!" });
+            return res.status(200).json({ status: 0, message: "Delete user successfully!" });
         } catch (err) {
             console.log("Error: " + err);
             return res.status(400).json({ status: 1, err });
