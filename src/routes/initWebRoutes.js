@@ -1,6 +1,7 @@
 import productController from "../controllers/productController.js";
 import usersController from "../controllers/usersController.js";
 import categoryController from "../controllers/categoryController.js";
+import otpController from "../controllers/otpController.js";
 
 function initWebRoutes(app) {
     app.get("/product", productController.getProducts);
@@ -17,6 +18,9 @@ function initWebRoutes(app) {
     app.post("/category", categoryController.addCategory);
     app.put("/category", categoryController.updateCategory);
     app.delete("/category", categoryController.deleteCategory);
+
+    app.get("/send-email", otpController.sendEmail);
+    app.get("/verify-otp", otpController.verifyOTP);
 }
 
 export default initWebRoutes;

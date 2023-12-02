@@ -18,7 +18,7 @@ const userController = {
             const users = await User.find(condition, null, option).sort(sort);
 
             if (!_.isEmpty(users)) {
-                return res.status(200).json({ status: 0, users });
+                return res.status(200).json({ status: 0, data: users });
             } else {
                 return res.status(200).json({ status: 2, message: "Cannot find users!" });
             }

@@ -18,7 +18,7 @@ const categoryController = {
             const categories = await Category.find(condition, null, option).sort(sort);
 
             if (!_.isEmpty(categories)) {
-                return res.status(200).json({ status: 0, categories });
+                return res.status(200).json({ status: 0, data: categories });
             } else {
                 return res.status(200).json({ status: 2, message: "Cannot find categories!" });
             }

@@ -18,7 +18,7 @@ const productController = {
             const products = await Product.find(condition, null, option).sort(sort);
 
             if (!_.isEmpty(products)) {
-                return res.status(200).json({ status: 0, products });
+                return res.status(200).json({ status: 0, data: products });
             } else {
                 return res.status(200).json({ status: 2, message: "Cannot find products!" });
             }
