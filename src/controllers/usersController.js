@@ -15,12 +15,28 @@ const userController = {
                 else condition[key] = data[key];
             });
 
-            const users = await User.find(condition, null, option).sort(sort);
+            const users = await User.find(condition, option).sort(sort);
 
             if (!_.isEmpty(users)) {
-                return res.status(200).json({ status: 0, data: users });
+                return res.status(200).json({ status: 0, users });
             } else {
                 return res.status(200).json({ status: 2, message: "Cannot find users!" });
+            }
+        } catch (err) {
+            console.log("Error: " + err);
+            return res.status(400).json({ status: 1, err });
+        }
+    },
+    checkUserExists: async (req, res) => {
+        try {
+            const condition = req.query;
+
+            const user = await User.findOne(condition);
+
+            if (!_.isEmpty(user)) {
+                return res.status(200).json({ status: 0, message: "User already exists!" });
+            } else {
+                return res.status(200).json({ status: 2, message: "User dosen't exists!" });
             }
         } catch (err) {
             console.log("Error: " + err);

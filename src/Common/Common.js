@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -19,6 +20,11 @@ const Common = {
         });
 
         console.log("Message sent: %s", info.messageId);
+    },
+    signAccessToken: async (data) => {
+        let token = jwt.sign(data, process.env.PRIVATE_KEY_JWT, { algorithm: "HS256", expiresIn: "4h" });
+
+        return token;
     },
 };
 
