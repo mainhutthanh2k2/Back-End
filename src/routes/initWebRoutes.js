@@ -7,6 +7,10 @@ import authController from "../controllers/authController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 
 function initWebRoutes(app) {
+    app.get("/", (req,res) => {
+        res.send('Hello')
+    });
+
     app.get("/product", productController.getProducts);
     app.post("/product", authMiddleware.verifyJWT, productController.addProduct);
     app.put("/product", authMiddleware.verifyJWT, productController.updateProduct);

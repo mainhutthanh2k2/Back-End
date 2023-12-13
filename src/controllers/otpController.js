@@ -6,13 +6,19 @@ let otpCode = null;
 
 const otpController = {
     sendEmail: async (req, res) => {
-        otpCode = Math.floor(Math.random() * 1000000);
+        try {
+            do {
+                otpCode = Math.floor(Math.random() * 1000000);
+            } while(!otpCode || otpCode >= 1000000)
 
-        Common.sendEmail(req.query.email, otpCode).catch((err) => {
-            res.json({ status: 1, message: "Email sending failed!" });
-        });
-
-        res.json({ status: 0, message: "Email sending successfully!" });
+            Common.sendEmail(req.query.email, otpCode).then(() => {
+                return res.json({ status: 0, message: "Email sending successfully!" });
+            }).catch((err) => {
+                return res.json({ status: 1, message: "Email sending failed!" });
+            });
+        }catch(err) {
+            return res.status(500).json({message: 'Get Error!'})
+        }
     },
     verifyOTP: async (req, res) => {
         const { otp, email } = req.query;
